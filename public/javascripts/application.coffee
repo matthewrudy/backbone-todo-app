@@ -10,8 +10,9 @@ $ ->
       app.list_path + (if id then "/items/#{id}" else '/items') + '.json'
 
     initialize: ->
-      if (!this.get('shortdesc'))
-        this.set 'shortdesc': this.EMPTY
+      unless this.get('shortdesc')
+        this.set
+          shortdesc: this.EMPTY
 
     toggle: ->
       this.save
@@ -41,13 +42,12 @@ $ ->
     # This method is overridden to save us messing around
     # with socket_id filtering.
     add: (models, options) ->
-      if _.isArray(models)
-        for model in models
-          if model.id and !app.Todos.get(model.id)
-            this._add(model, options)
-      else
-        if models.id && !app.Todos.get(models.id)
-          this._add(models, options)
+      unless _.isArray(models)
+        models = [models]
+      
+      for model in models
+        if model.id and !app.Todos.get(model.id)
+          this._add(model, options)
       this
 
   app.Todos = new app.TodoList
@@ -163,9 +163,9 @@ $ ->
         , 1000, this.input
       
     clearCompleted: ->
-      _.each(app.Todos.done(), (todo) ->
+      _.each app.Todos.done(), (todo) ->
         todo.clear()
-      )
+        
       false
 
     showTooltip: (e) ->

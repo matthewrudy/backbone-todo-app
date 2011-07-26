@@ -11,7 +11,7 @@ $(function() {
     initialize: function() {
       if (!this.get('shortdesc')) {
         return this.set({
-          'shortdesc': this.EMPTY
+          shortdesc: this.EMPTY
         });
       }
     },
@@ -45,16 +45,13 @@ $(function() {
     },
     add: function(models, options) {
       var model, _i, _len;
-      if (_.isArray(models)) {
-        for (_i = 0, _len = models.length; _i < _len; _i++) {
-          model = models[_i];
-          if (model.id && !app.Todos.get(model.id)) {
-            this._add(model, options);
-          }
-        }
-      } else {
-        if (models.id && !app.Todos.get(models.id)) {
-          this._add(models, options);
+      if (!_.isArray(models)) {
+        models = [models];
+      }
+      for (_i = 0, _len = models.length; _i < _len; _i++) {
+        model = models[_i];
+        if (model.id && !app.Todos.get(model.id)) {
+          this._add(model, options);
         }
       }
       return this;
